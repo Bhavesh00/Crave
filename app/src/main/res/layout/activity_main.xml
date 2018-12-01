@@ -28,6 +28,7 @@
             android:id="@+id/home_search_bar"
             android:layout_margin="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="false"/>
     </android.support.v7.widget.CardView>
 </LinearLayout>
