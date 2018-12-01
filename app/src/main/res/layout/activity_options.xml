@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <TextView
+        android:id="@+id/options_find_it_nearby"
         android:gravity="center"
         android:layout_weight="1"
         android:background="@drawable/restaurant"
@@ -16,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <TextView
+        android:id="@+id/options_make_it_yourself"
         android:gravity="center"
         android:layout_weight="1"
         android:background="@drawable/homemade"
