@@ -27,7 +27,9 @@ public class Options extends AppCompatActivity {
         makeYourself.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Add intent
+                Intent toMakeYourself = new Intent(thisActivity, MakeYourself.class);
+                toMakeYourself.putExtra("SearchValue", searchVal);
+                startActivity(toMakeYourself);
             }
         });
     }

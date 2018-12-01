@@ -8,18 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FindNearby extends AppCompatActivity {
+public class MakeYourself extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_nearby);
+        setContentView(R.layout.activity_make_yourself);
         final String searchVal = getIntent().getStringExtra("SearchValue");
         TextView searchValue = findViewById(R.id.search_val);
         searchValue.setText(searchVal);
 
-        final FindNearby thisActivity = this;
-        SearchView searchView = findViewById(R.id.find_nearby_search_bar);
+        final MakeYourself thisActivity = this;
+        SearchView searchView = findViewById(R.id.make_yourself_search_bar);
         searchView.setQueryHint("What else are you craving?");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -36,11 +36,11 @@ public class FindNearby extends AppCompatActivity {
             }
         });
 
-        Button findNearbyButton = findViewById(R.id.make_yourself_instead);
+        Button findNearbyButton = findViewById(R.id.find_nearby_instead);
         findNearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toFindNearby = new Intent(thisActivity, MakeYourself.class);
+                Intent toFindNearby = new Intent(thisActivity, FindNearby.class);
                 toFindNearby.putExtra("SearchValue", searchVal);
                 startActivity(toFindNearby);
             }

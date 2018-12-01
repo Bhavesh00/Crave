@@ -7,14 +7,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <android.support.v7.widget.SearchView
-        android:id="@+id/find_nearby_search_bar"
+        android:id="@+id/make_yourself_search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:iconifiedByDefault="false"/>
     <Button
-        android:id="@+id/make_yourself_instead"
-        android:text="Make it Yourself Instead"
+        android:id="@+id/find_nearby_instead"
+        android:text="Find it Nearby Instead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
