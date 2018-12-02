@@ -19,6 +19,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 
@@ -81,10 +82,16 @@ public class FindNearby extends AppCompatActivity {
 
     /* Make API Call */
     void startAPICall(String searchVal, double longit, double latit) {
+        Map<String, Object> params = new HashMap();
+        params.put("term", searchVal);
+        params.put("latitude", latit);
+        params.put("longitude", longit);
+        JSONObject obj = new JSONObject(params);
+
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://api.yelp.com/v3/businesses/search?types=term,latitude,longitude", null,
+                    "https://api.yelp.com/v3/businesses/search?types=term,latitude,longitude", obj,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
@@ -98,7 +105,5 @@ public class FindNearby extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }
