@@ -12,17 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.Volley;
-
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,10 +42,9 @@ public class FindNearby extends AppCompatActivity {
             double latitude = location.getLatitude();
             startAPICall(searchVal, longitude, latitude);
         } catch (SecurityException e) {
-            Toast t = Toast.makeText(getApplicationContext(), "Please allow your location to be" +
-                    "accessed", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Please allow your location to be" +
+                    "accessed", Toast.LENGTH_LONG).show();
         }
-
         final FindNearby thisActivity = this;
         SearchView searchView = findViewById(R.id.find_nearby_search_bar);
         searchView.setQueryHint("What else are you craving?");
@@ -82,7 +76,7 @@ public class FindNearby extends AppCompatActivity {
 
     /* Make API Call */
     void startAPICall(String searchVal, double longit, double latit) {
-        Map<String, Object> params = new HashMap();
+        Map<String, Object> params = new HashMap<>();
         params.put("term", searchVal);
         params.put("latitude", latit);
         params.put("longitude", longit);
@@ -95,12 +89,22 @@ public class FindNearby extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
+                            Log.d("response", "response received");
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(final VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("num4t4uRfzaxGhlkucxxIg", "ZjV189V_w5Y--0G0e6YvhipNOOkPRGTNHabOLOM3v8LKlNvs2xyivtTiFlJPB451rEbEulehGDhdlQwq_QjV9ed7OtsXOl-m6bbR_ZxJENLc2TNQ-nHeP-b-9_0CXHYx");
+                    return params;
+                }
+            };
+
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
