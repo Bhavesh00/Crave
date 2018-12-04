@@ -18,6 +18,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ public class FindNearby extends AppCompatActivity {
         final String searchVal = getIntent().getStringExtra("SearchValue");
         TextView searchValue = findViewById(R.id.search_val);
         searchValue.setText(searchVal);
+        requestQueue = Volley.newRequestQueue(this);
         // get location here and pass it through to the API call
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location location;
@@ -40,10 +43,10 @@ public class FindNearby extends AppCompatActivity {
             location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
+            Log.d("locationlog", "locationlog" + ":" + location + ":" + latitude);
             startAPICall(searchVal, longitude, latitude);
         } catch (SecurityException e) {
-            Toast.makeText(getApplicationContext(), "Please allow your location to be" +
-                    "accessed", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Please enable app location permissions.", Toast.LENGTH_LONG).show();
         }
         final FindNearby thisActivity = this;
         SearchView searchView = findViewById(R.id.find_nearby_search_bar);
@@ -81,7 +84,6 @@ public class FindNearby extends AppCompatActivity {
         params.put("latitude", latit);
         params.put("longitude", longit);
         JSONObject obj = new JSONObject(params);
-
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
@@ -89,12 +91,13 @@ public class FindNearby extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
-                            Log.d("response", "response received");
+                            Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
+                            Log.d("response_gotten", "response received");
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(final VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error:" + error.toString(), Toast.LENGTH_LONG).show();
                 }
             }){
                 @Override
@@ -104,7 +107,6 @@ public class FindNearby extends AppCompatActivity {
                     return params;
                 }
             };
-
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
