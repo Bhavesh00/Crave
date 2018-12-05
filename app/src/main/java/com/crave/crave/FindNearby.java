@@ -83,31 +83,36 @@ public class FindNearby extends AppCompatActivity {
 
     /* Make API Call */
     void startAPICall(String searchVal, double longit, double latit) {
+
         Map<String, Object> params = new HashMap<>();
-        params.put("term", searchVal);
-        params.put("latitude", latit);
-        params.put("longitude", longit);
+        params.put("query", searchVal);
+        params.put("lat", latit);
+        params.put("lon", longit);
+        params.put("count", 10);
         JSONObject obj = new JSONObject(params);
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://api.yelp.com/v3/businesses/search?types=term,latitude,longitude", obj,
+                    "https://developers.zomato.com/api/v2.1/search?types=query,lat,lon,count",
+                    obj,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
                             Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
-                            Log.d("response_gotten", "response received");
+                            Log.d("response_JSON", "" + response);
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(final VolleyError error) {
+                    error.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Error:" + error.toString(), Toast.LENGTH_LONG).show();
                 }
             }){
                 @Override
                 public Map<String, String> getHeaders() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("num4t4uRfzaxGhlkucxxIg", "ZjV189V_w5Y--0G0e6YvhipNOOkPRGTNHabOLOM3v8LKlNvs2xyivtTiFlJPB451rEbEulehGDhdlQwq_QjV9ed7OtsXOl-m6bbR_ZxJENLc2TNQ-nHeP-b-9_0CXHYx");
+                    params.put("user-key", "a7d51f7199c934dd65a3207602073127");
+                    params.put("Accept", "application/json");
                     return params;
                 }
             };
