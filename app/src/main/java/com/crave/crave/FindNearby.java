@@ -1,10 +1,10 @@
 package com.crave.crave;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +30,10 @@ import java.util.Map;
 
 public class FindNearby extends AppCompatActivity {
     private static RequestQueue requestQueue;
+    private LocationManager manager;
+    private LocationListener listener;
+    private Location location;
+    private boolean receivedLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +45,42 @@ public class FindNearby extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         // get location here and pass it through to the API call
         checkPermission();
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location location;
+        manager = (LocationManager)this.getSystemService(LOCATION_SERVICE);
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location setLocation) {
+                if (!receivedLocation) {
+                    Log.d("Location: ", setLocation.toString());
+                    location = setLocation;
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
+                    receivedLocation = true;
+                    startAPICall(searchVal, longitude, latitude);
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
         try {
-            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-            Log.d("locationlog", "locationlog" + ":" + location + ":" + latitude);
-            startAPICall(searchVal, longitude, latitude);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0, listener);
+            //location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //double longitude = location.getLongitude();
+            //double latitude = location.getLatitude();
+            //Log.d("locationlog", "locationlog" + ":" + location + ":" + latitude);
+            //startAPICall(searchVal, longitude, latitude);
         } catch (SecurityException e) {
             Toast.makeText(getApplicationContext(), "Please enable app location permissions.", Toast.LENGTH_LONG).show();
         }
@@ -83,18 +115,14 @@ public class FindNearby extends AppCompatActivity {
 
     /* Make API Call */
     void startAPICall(String searchVal, double longit, double latit) {
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("query", searchVal);
-        params.put("lat", latit);
-        params.put("lon", longit);
-        params.put("count", 10);
-        JSONObject obj = new JSONObject(params);
+        // City id = 685
+        //https://developers.zomato.com/api/v2.1/search?entity_type=city&q=pizza&count=10&lat=36.391087&lon=-117.857827&radius=5000&sort=rating&order=desc
+        String url = "https://developers.zomato.com/api/v2.1/search?entity_type=city&q=" + searchVal + "&count=10&lat="
+                + latit + "&lon=" + longit + "&radius=5000&sort=rating&order=desc";
         try {
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    "https://developers.zomato.com/api/v2.1/search?types=query,lat,lon,count",
-                    obj,
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                    url,
+                    null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
