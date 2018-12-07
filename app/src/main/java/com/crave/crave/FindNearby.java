@@ -11,10 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +27,6 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.Inflater;
-
 
 public class FindNearby extends AppCompatActivity {
     private static RequestQueue requestQueue;
@@ -87,11 +83,6 @@ public class FindNearby extends AppCompatActivity {
         };
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0, listener);
-            //location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            //double longitude = location.getLongitude();
-            //double latitude = location.getLatitude();
-            //Log.d("locationlog", "locationlog" + ":" + location + ":" + latitude);
-            //startAPICall(searchVal, longitude, latitude);
         } catch (SecurityException e) {
             Toast.makeText(getApplicationContext(), "Please enable app location permissions.", Toast.LENGTH_LONG).show();
         }
@@ -140,6 +131,7 @@ public class FindNearby extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
                             Log.d("response_JSON", "" + response);
                             try {
+                                // FIX THE DATA HANDLING:
                                 restaurantNames = response.getJSONArray("name");
                                 restaurantLocation = response.getJSONArray("location");
                                 address = restaurantLocation.getJSONObject(0);
@@ -151,6 +143,7 @@ public class FindNearby extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
 
                         }
                     }, new Response.ErrorListener() {
@@ -180,21 +173,5 @@ public class FindNearby extends AppCompatActivity {
             ActivityCompat.requestPermissions(FindNearby.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
-    }
-
-    public void setLayout(String name, String address, String rating, String menu, String image) {
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-        View childLayout = inflater.inflate(R.layout.find_yourself_list, null , false);
-        TextView nameView = childLayout.findViewById(R.id.restaurant_name);
-        nameView.setText(name);
-        TextView addressView = childLayout.findViewById(R.id.restaurant_address);
-        nameView.setText(address);
-        TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
-        nameView.setText(name);
-        TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
-        nameView.setText(name);
-        View parentLayout = inflater.inflate(R.layout.activity_find_nearby, null, false);
-        LinearLayout frame = parentLayout.findViewById(R.id.make_yourself_frame);
-        frame.addView(childLayout);
     }
 }

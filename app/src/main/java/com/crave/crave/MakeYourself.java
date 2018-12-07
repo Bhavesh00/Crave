@@ -3,6 +3,7 @@ package com.crave.crave;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,12 +21,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class MakeYourself extends AppCompatActivity {
+
+    private JSONArray hits;
+    private JSONObject recipe;
+    private ArrayList<String> labels; // loop through and add labels
+    private ArrayList<String> imageUrl; // loop through and add url's
+    private JSONArray ingredientLines;
+    private Map<String, ArrayList<String>> ingredients; // loop through
+
     private static RequestQueue requestQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +86,12 @@ public class MakeYourself extends AppCompatActivity {
                         public void onResponse(final JSONObject response) {
                             Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
                             Log.d("response_JSON", "" + response);
+                            try {
+                                // FINISH THE DATA HANDLING HERE:
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }, new Response.ErrorListener() {
                 @Override
