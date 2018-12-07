@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +36,15 @@ public class FindNearby extends AppCompatActivity {
     private LocationListener listener;
     private Location location;
     private boolean receivedLocation = false;
+    private JSONArray restaurantNames;
+    private JSONArray restaurantLocation;
+    private JSONObject address;
+    private JSONObject city;
+    private JSONArray picture;
+    private JSONArray rating;
+    private JSONObject userRating;
+    private JSONObject ratingColor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +139,20 @@ public class FindNearby extends AppCompatActivity {
                         public void onResponse(final JSONObject response) {
                             Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
                             Log.d("response_JSON", "" + response);
+                            try {
+                                restaurantNames = response.getJSONArray("name");
+                                restaurantLocation = response.getJSONArray("location");
+                                address = restaurantLocation.getJSONObject(0);
+                                city = restaurantLocation.getJSONObject(2);
+                                picture = response.getJSONArray("featured_image");
+                                rating = response.getJSONArray("user_rating");
+                                userRating = rating.getJSONObject(0);
+                                ratingColor = rating.getJSONObject(2);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
                         }
                     }, new Response.ErrorListener() {
                 @Override
