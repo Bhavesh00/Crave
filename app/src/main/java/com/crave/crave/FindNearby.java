@@ -28,8 +28,6 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 public class FindNearby extends AppCompatActivity {
     private static RequestQueue requestQueue;
     private LocationManager manager;
@@ -51,8 +49,6 @@ public class FindNearby extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_nearby);
         final String searchVal = getIntent().getStringExtra("SearchValue");
-        TextView searchValue = findViewById(R.id.search_val);
-        searchValue.setText(searchVal);
         requestQueue = Volley.newRequestQueue(this);
         // get location here and pass it through to the API call
         checkPermission();
@@ -87,11 +83,6 @@ public class FindNearby extends AppCompatActivity {
         };
         try {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0 ,0, listener);
-            //location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            //double longitude = location.getLongitude();
-            //double latitude = location.getLatitude();
-            //Log.d("locationlog", "locationlog" + ":" + location + ":" + latitude);
-            //startAPICall(searchVal, longitude, latitude);
         } catch (SecurityException e) {
             Toast.makeText(getApplicationContext(), "Please enable app location permissions.", Toast.LENGTH_LONG).show();
         }
@@ -140,6 +131,7 @@ public class FindNearby extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
                             Log.d("response_JSON", "" + response);
                             try {
+                                // FIX THE DATA HANDLING:
                                 restaurantNames = response.getJSONArray("name");
                                 restaurantLocation = response.getJSONArray("location");
                                 address = restaurantLocation.getJSONObject(0);
