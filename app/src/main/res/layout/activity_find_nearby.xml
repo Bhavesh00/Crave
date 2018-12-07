@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <LinearLayout
-            android:id="@+id/make_yourself_frame"
+            android:id="@+id/find_nearby_frame"
             android:background="#ffffff"
             android:orientation="vertical"
             android:layout_width="wrap_content"

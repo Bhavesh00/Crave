@@ -11,12 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +39,9 @@ public class FindNearby extends AppCompatActivity {
     private LocationListener listener;
     private Location location;
     private boolean receivedLocation = false;
-    private JSONArray restaurantNames;
+    private JSONArray restaurantHead;
+    private JSONObject restaurant;
+    private ArrayList<String> names;
     private JSONArray restaurantLocation;
     private JSONObject address;
     private JSONObject city;
@@ -132,7 +139,22 @@ public class FindNearby extends AppCompatActivity {
                             Log.d("response_JSON", "" + response);
                             try {
                                 // FIX THE DATA HANDLING:
+                                Log.d("cookies", "cookies");
+                                restaurantHead = response.getJSONArray("restaurants");
+                                Log.d("restaurant length: ", ""+ restaurantHead.length());
+                                for (int i = 0; i < restaurantHead.length(); i++) {
+                                    int count = 0;
+                                    restaurant = restaurantHead.getJSONObject(0);
+                                    JSONObject name = restaurant.getJSONObject("name");
+
+                                    String nameVal = name.toString();
+                                   // Log.d("cookies:", name);
+                                    setLayout(nameVal, "null", "penis", "null", "dank");
+                                }
+
+                                 /*
                                 restaurantNames = response.getJSONArray("name");
+
                                 restaurantLocation = response.getJSONArray("location");
                                 address = restaurantLocation.getJSONObject(0);
                                 city = restaurantLocation.getJSONObject(2);
@@ -140,7 +162,9 @@ public class FindNearby extends AppCompatActivity {
                                 rating = response.getJSONArray("user_rating");
                                 userRating = rating.getJSONObject(0);
                                 ratingColor = rating.getJSONObject(2);
-                            } catch (Exception e) {
+                                */
+                            } catch (JSONException e) {
+                                Log.d("Memes", "Memes");
                                 e.printStackTrace();
                             }
 
@@ -173,5 +197,24 @@ public class FindNearby extends AppCompatActivity {
             ActivityCompat.requestPermissions(FindNearby.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
+    }
+
+    public void setLayout(String name, String address, String rating, String menu, String image) {
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        View childLayout = inflater.inflate(R.layout.find_yourself_list, null, false);
+        TextView nameView = childLayout.findViewById(R.id.restaurant_name);
+        nameView.setText(name);
+        /*
+        TextView addressView = childLayout.findViewById(R.id.restaurant_address);
+        nameView.setText(address);
+        TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
+        nameView.setText(name);
+        TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
+        nameView.setText(name);
+        ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
+        */
+        View parentLayout = inflater.inflate(R.layout.activity_find_nearby, null, false);
+        LinearLayout frame = parentLayout.findViewById(R.id.find_nearby_frame);
+        frame.addView(childLayout);
     }
 }
