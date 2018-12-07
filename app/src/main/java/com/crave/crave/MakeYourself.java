@@ -3,9 +3,6 @@ package com.crave.crave;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,8 +32,6 @@ public class MakeYourself extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_yourself);
         final String searchVal = getIntent().getStringExtra("SearchValue");
-        TextView searchValue = findViewById(R.id.search_val);
-        searchValue.setText(searchVal);
 
         requestQueue = Volley.newRequestQueue(this);
         final MakeYourself thisActivity = this;
@@ -66,10 +61,11 @@ public class MakeYourself extends AppCompatActivity {
                 startActivity(toFindNearby);
             }
         });
+        startAPICall(searchVal);
     }
     /* Make API Call */
-    void startAPICall(String searchVal, double longit, double latit) {
-        String url = "https://api.edamam.com/search";
+    void startAPICall(String searchVal) {
+        String url = "https://api.edamam.com/search?app_id=8bacdab9&app_key=824756907419ada9db6852f47da00811&q=" + searchVal;
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                     url,
@@ -90,8 +86,8 @@ public class MakeYourself extends AppCompatActivity {
                 @Override
                 public Map<String, String> getHeaders() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("user-key", "a7d51f7199c934dd65a3207602073127");
-                    params.put("Accept", "application/json");
+                    params.put("app_id", "8bacdab9");
+                    params.put("app_key", "824756907419ada9db6852f47da00811");
                     return params;
                 }
             };
