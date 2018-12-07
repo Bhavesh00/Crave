@@ -14,11 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,8 +26,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,17 +35,6 @@ public class FindNearby extends AppCompatActivity {
     private LocationListener listener;
     private Location location;
     private boolean receivedLocation = false;
-    private JSONArray restaurantHead;
-    private JSONObject restaurant;
-    private ArrayList<String> names;
-    private JSONArray restaurantLocation;
-    private JSONObject address;
-    private JSONObject city;
-    private JSONArray picture;
-    private JSONArray rating;
-    private JSONObject userRating;
-    private JSONObject ratingColor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,33 +123,25 @@ public class FindNearby extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
                             Log.d("response_JSON", "" + response);
                             try {
-                                // FIX THE DATA HANDLING:
-                                Log.d("cookies", "cookies");
-                                restaurantHead = response.getJSONArray("restaurants");
-                                Log.d("restaurant length: ", ""+ restaurantHead.length());
-                                for (int i = 0; i < restaurantHead.length(); i++) {
-                                    int count = 0;
-                                    restaurant = restaurantHead.getJSONObject(0);
-                                    JSONObject name = restaurant.getJSONObject("name");
-
-                                    String nameVal = name.toString();
-                                   // Log.d("cookies:", name);
-                                    setLayout(nameVal, "null", "penis", "null", "dank");
+                                JSONArray restaurantList = response.getJSONArray("restaurants");
+                                for (int i = 0; i < restaurantList.length(); i++) {
+                                    //Get each object from list
+                                    JSONObject obj = restaurantList.getJSONObject(i);
+                                    //Get the restaurant
+                                    JSONObject restaurant = obj.getJSONObject("restaurant");
+                                    //Get Name
+                                    String nameVal = restaurant.getString("name");
+                                    //Get Address
+                                    JSONObject location = restaurant.getJSONObject("location");
+                                    String address = location.getString("address");
+                                    String locality = location.getString("locality");
+                                    String city = location.getString("city");
+                                    //Get Rating
+                                    JSONObject rating = restaurant.getJSONObject("user_rating");
+                                    String aggregateRating = rating.getString("aggregate_rating") + "/5";
+                                    setLayout(nameVal, address + locality + city, aggregateRating, null, null);
                                 }
-
-                                 /*
-                                restaurantNames = response.getJSONArray("name");
-
-                                restaurantLocation = response.getJSONArray("location");
-                                address = restaurantLocation.getJSONObject(0);
-                                city = restaurantLocation.getJSONObject(2);
-                                picture = response.getJSONArray("featured_image");
-                                rating = response.getJSONArray("user_rating");
-                                userRating = rating.getJSONObject(0);
-                                ratingColor = rating.getJSONObject(2);
-                                */
                             } catch (JSONException e) {
-                                Log.d("Memes", "Memes");
                                 e.printStackTrace();
                             }
 
@@ -204,17 +181,16 @@ public class FindNearby extends AppCompatActivity {
         View childLayout = inflater.inflate(R.layout.find_yourself_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.restaurant_name);
         nameView.setText(name);
-        /*
         TextView addressView = childLayout.findViewById(R.id.restaurant_address);
-        nameView.setText(address);
+        addressView.setText(address);
         TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
-        nameView.setText(name);
+        ratingView.setText(rating);
+        /*
         TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
-        nameView.setText(name);
+        nameView.setText(menu);
         ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
         */
-        View parentLayout = inflater.inflate(R.layout.activity_find_nearby, null, false);
-        LinearLayout frame = parentLayout.findViewById(R.id.find_nearby_frame);
+        LinearLayout frame = findViewById(R.id.find_nearby_frame);
         frame.addView(childLayout);
     }
 }
