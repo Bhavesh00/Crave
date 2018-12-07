@@ -11,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +29,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.zip.Inflater;
 
 
 public class FindNearby extends AppCompatActivity {
@@ -51,8 +53,6 @@ public class FindNearby extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_nearby);
         final String searchVal = getIntent().getStringExtra("SearchValue");
-        TextView searchValue = findViewById(R.id.search_val);
-        searchValue.setText(searchVal);
         requestQueue = Volley.newRequestQueue(this);
         // get location here and pass it through to the API call
         checkPermission();
@@ -152,7 +152,6 @@ public class FindNearby extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -181,5 +180,21 @@ public class FindNearby extends AppCompatActivity {
             ActivityCompat.requestPermissions(FindNearby.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
+    }
+
+    public void setLayout(String name, String address, String rating, String menu, String image) {
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        View childLayout = inflater.inflate(R.layout.find_yourself_list, null , false);
+        TextView nameView = childLayout.findViewById(R.id.restaurant_name);
+        nameView.setText(name);
+        TextView addressView = childLayout.findViewById(R.id.restaurant_address);
+        nameView.setText(address);
+        TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
+        nameView.setText(name);
+        TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
+        nameView.setText(name);
+        View parentLayout = inflater.inflate(R.layout.activity_find_nearby, null, false);
+        LinearLayout frame = parentLayout.findViewById(R.id.make_yourself_frame);
+        frame.addView(childLayout);
     }
 }
