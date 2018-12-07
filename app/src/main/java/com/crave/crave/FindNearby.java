@@ -111,8 +111,8 @@ public class FindNearby extends AppCompatActivity {
     void startAPICall(String searchVal, double longit, double latit) {
         // City id = 685
         //https://developers.zomato.com/api/v2.1/search?entity_type=city&q=pizza&count=10&lat=36.391087&lon=-117.857827&radius=5000&sort=rating&order=desc
-        String url = "https://developers.zomato.com/api/v2.1/search?entity_type=city&q=" + searchVal + "&count=10&lat="
-                + latit + "&lon=" + longit + "&radius=5000&sort=rating&order=desc";
+        String url = "https://developers.zomato.com/api/v2.1/search?entity_type=city&q=" + searchVal + "&count=20&lat="
+                + latit + "&lon=" + longit + "&radius=5000&order=desc";
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                     url,
@@ -139,7 +139,8 @@ public class FindNearby extends AppCompatActivity {
                                     //Get Rating
                                     JSONObject rating = restaurant.getJSONObject("user_rating");
                                     String aggregateRating = rating.getString("aggregate_rating") + "/5";
-                                    setLayout(nameVal, address + locality + city, aggregateRating, null, null);
+                                    String votes = rating.getString("votes");
+                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", null, null);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
