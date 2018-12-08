@@ -91,12 +91,14 @@ public class MakeYourself extends AppCompatActivity {
                                 // FINISH THE DATA HANDLING HERE:
                                 JSONArray hits = response.getJSONArray("hits");
                                 for (int i = 0; i < hits.length(); i++) {
+                                    JSONObject obj = hits.getJSONObject(i);
                                     // Get Recipe
-                                    JSONObject recipe = hits.getJSONObject(i);
+                                    JSONObject recipe = obj.getJSONObject("recipe");
                                     // Get Label
                                     String label = recipe.getString("label");
                                     // Get Image url
                                     String image = recipe.getString("image");
+                                    Log.d("Image url:", image);
                                     // Get Array of Ingredients
                                     JSONArray ingredients = recipe.getJSONArray("ingredientLines");
                                     // Get Array of Health Labels
@@ -113,6 +115,7 @@ public class MakeYourself extends AppCompatActivity {
                                     // Get Protein:
                                     JSONObject protein = nutrients.getJSONObject("PROCNT");
                                     String proteinQuantity = protein.getString("quantity");
+                                    Log.d("Protein api: ", proteinQuantity);
 
 
                                 }
