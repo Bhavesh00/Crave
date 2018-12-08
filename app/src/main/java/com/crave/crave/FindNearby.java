@@ -112,7 +112,7 @@ public class FindNearby extends AppCompatActivity {
         // City id = 685
         //https://developers.zomato.com/api/v2.1/search?entity_type=city&q=pizza&count=10&lat=36.391087&lon=-117.857827&radius=5000&sort=rating&order=desc
         String url = "https://developers.zomato.com/api/v2.1/search?entity_type=city&q=" + searchVal + "&count=20&lat="
-                + latit + "&lon=" + longit + "&radius=5000&order=desc";
+                + latit + "&lon=" + longit + "&radius=5000&sort=real_distance&order=asc";
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                     url,
