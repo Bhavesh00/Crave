@@ -29,13 +29,14 @@ import java.util.Map;
 import java.util.ArrayList;
 
 public class MakeYourself extends AppCompatActivity {
-
+    /*
     private JSONArray hits;
     private JSONObject recipe;
     private ArrayList<String> labels; // loop through and add labels
     private ArrayList<String> imageUrl; // loop through and add url's
     private JSONArray ingredientLines;
     private Map<String, ArrayList<String>> ingredients; // loop through
+    */
 
     private static RequestQueue requestQueue;
     @Override
@@ -88,7 +89,33 @@ public class MakeYourself extends AppCompatActivity {
                             Log.d("response_JSON", "" + response);
                             try {
                                 // FINISH THE DATA HANDLING HERE:
+                                JSONArray hits = response.getJSONArray("hits");
+                                for (int i = 0; i < hits.length(); i++) {
+                                    // Get Recipe
+                                    JSONObject recipe = hits.getJSONObject(i);
+                                    // Get Label
+                                    String label = recipe.getString("label");
+                                    // Get Image url
+                                    String image = recipe.getString("image");
+                                    // Get Array of Ingredients
+                                    JSONArray ingredients = recipe.getJSONArray("ingredientLines");
+                                    // Get Array of Health Labels
+                                    JSONArray health_labels = recipe.getJSONArray("healthLabels");
+                                    // Get calories:
+                                    String calories = recipe.getString("calories");
+                                    // Get fat:
+                                    JSONObject nutrients = recipe.getJSONObject("totalNutrients");
+                                    JSONObject fat = nutrients.getJSONObject("FAT");
+                                    String fatQuantity = fat.getString("quantity");
+                                    // Get Sugar:
+                                    JSONObject sugar = nutrients.getJSONObject("SUGAR");
+                                    String sugarQuantity = fat.getString("quantity");
+                                    // Get Protein:
+                                    JSONObject protein = nutrients.getJSONObject("PROCNT");
+                                    String proteinQuantity = protein.getString("quantity");
 
+
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

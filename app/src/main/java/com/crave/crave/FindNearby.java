@@ -141,6 +141,13 @@ public class FindNearby extends AppCompatActivity {
                                     String aggregateRating = rating.getString("aggregate_rating") + "/5";
                                     String votes = rating.getString("votes");
                                     setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", null, null);
+                                    // Get Restaurant Menu:
+
+
+
+                                    // Get image url:
+
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
