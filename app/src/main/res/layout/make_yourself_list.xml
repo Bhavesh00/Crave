@@ -12,6 +12,11 @@
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/recepie_img"
+        android:layout_gravity="center"
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
     <TextView
         android:layout_margin="5dp"
         android:id="@+id/recepie_ingredients"
