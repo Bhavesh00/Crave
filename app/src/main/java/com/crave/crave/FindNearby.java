@@ -36,6 +36,8 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -159,7 +161,6 @@ public class FindNearby extends AppCompatActivity {
                                     String menu = restaurant.getString("menu_url");
                                     //Set Layout
                                     setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", menu, image, url);
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -201,8 +202,20 @@ public class FindNearby extends AppCompatActivity {
         View childLayout = inflater.inflate(R.layout.find_nearby_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.restaurant_name);
         nameView.setText(name);
+
         TextView addressView = childLayout.findViewById(R.id.restaurant_address);
-        addressView.setText(address);
+        // Example: String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+        String addressCopy = address;
+        String map = "";
+        try {
+            map = "https://www.google.com/maps/search/?api=1&query=" + URLEncoder.encode(addressCopy, StandardCharsets.UTF_8.name());
+        } catch(Exception e) {
+            Log.getStackTraceString(e);
+        }
+        addressView.setText(Html.fromHtml("<a href=\""+ map + "\">" + address + "</a>"));
+        addressView.setClickable(true);
+        addressView.setMovementMethod(LinkMovementMethod.getInstance());
+
 
         TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
         ratingView.setText(Html.fromHtml("<a href=\""+ url + "\">" + rating + "</a>"));
