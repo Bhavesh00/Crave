@@ -11,6 +11,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -150,7 +153,7 @@ public class FindNearby extends AppCompatActivity {
                                     // Get menu
                                     String menu = restaurant.getString("menu_url");
                                     //Set Layout
-                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", null, image);
+                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", menu, image);
 
                                 }
                             } catch (JSONException e) {
@@ -197,10 +200,11 @@ public class FindNearby extends AppCompatActivity {
         addressView.setText(address);
         TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
         ratingView.setText(rating);
-        /*
         TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
-        nameView.setText(menu);
-        */
+        menuView.setText(Html.fromHtml("<a href=\""+ menu + "\">" + "Menu" + "</a>"));
+        menuView.setClickable(true);
+        menuView.setMovementMethod(LinkMovementMethod.getInstance());
+        
         ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
         imageView.setImageDrawable(LoadImageFromWebOperations(image));
 
