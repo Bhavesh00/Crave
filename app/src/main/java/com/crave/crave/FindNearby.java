@@ -3,6 +3,7 @@ package com.crave.crave;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,7 +117,7 @@ public class FindNearby extends AppCompatActivity {
         // City id = 685
         //https://developers.zomato.com/api/v2.1/search?entity_type=city&q=pizza&count=10&lat=36.391087&lon=-117.857827&radius=5000&sort=rating&order=desc
         String url = "https://developers.zomato.com/api/v2.1/search?entity_type=city&q=" + searchVal + "&count=20&lat="
-                + latit + "&lon=" + longit + "&radius=5000&sort=real_distance&order=asc";
+                + latit + "&lon=" + longit + "&radius=5000&order=desc";
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                     url,
@@ -140,13 +145,10 @@ public class FindNearby extends AppCompatActivity {
                                     JSONObject rating = restaurant.getJSONObject("user_rating");
                                     String aggregateRating = rating.getString("aggregate_rating") + "/5";
                                     String votes = rating.getString("votes");
-                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", null, null);
-                                    // Get Restaurant Menu:
-
-
-
-                                    // Get image url:
-
+                                    //Get Image
+                                    String image = restaurant.getString("photos_url");
+                                    //Set Layout
+                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", null, image);
 
                                 }
                             } catch (JSONException e) {
@@ -186,7 +188,7 @@ public class FindNearby extends AppCompatActivity {
 
     public void setLayout(String name, String address, String rating, String menu, String image) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-        View childLayout = inflater.inflate(R.layout.find_yourself_list, null, false);
+        View childLayout = inflater.inflate(R.layout.find_nearby_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.restaurant_name);
         nameView.setText(name);
         TextView addressView = childLayout.findViewById(R.id.restaurant_address);
@@ -196,9 +198,20 @@ public class FindNearby extends AppCompatActivity {
         /*
         TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
         nameView.setText(menu);
-        ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
         */
+        ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
+        imageView.setImageDrawable(LoadImageFromWebOperations(image));
+
         LinearLayout frame = findViewById(R.id.find_nearby_frame);
         frame.addView(childLayout);
+    }
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            return Drawable.createFromStream(is, null);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
