@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,12 +30,11 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
 
 public class MakeYourself extends AppCompatActivity {
     /*
@@ -106,10 +106,9 @@ public class MakeYourself extends AppCompatActivity {
                                     String label = recipe.getString("label");
                                     // Get Image url
                                     String image = recipe.getString("image");
-                                    Log.d("Image url:", image);
                                     // Get recipe instructions
-                                    String instruction_url = "Recepie Url: " + recipe.getString("url");
-                                    Log.d("Instructions:", instruction_url);
+                                    String instruction_url = recipe.getString("url");
+                                    Log.d("Recipe url", instruction_url);
                                     // Get Array of Ingredients
                                     JSONArray ingredients = recipe.getJSONArray("ingredientLines");
                                     String ingredString = "";
@@ -119,7 +118,6 @@ public class MakeYourself extends AppCompatActivity {
                                             ingredString += ", ";
                                         }
                                     }
-                                    Log.d("Check ingred:", ingredString);
                                     // Get Array of Health Labels
                                     JSONArray health_labels = recipe.getJSONArray("healthLabels");
                                     String healthString = "";
@@ -129,7 +127,6 @@ public class MakeYourself extends AppCompatActivity {
                                             healthString += ", ";
                                         }
                                     }
-                                    Log.d("Check health:", healthString);
                                     // Get calories:
                                     String calories = recipe.getString("calories");
                                     // Get fat:
@@ -142,7 +139,6 @@ public class MakeYourself extends AppCompatActivity {
                                     // Get Protein:
                                     JSONObject protein = nutrients.getJSONObject("PROCNT");
                                     String proteinQuantity = protein.getString("quantity");
-                                    Log.d("Protein api: ", proteinQuantity);
 
                                     String nutriString = "Calories: " + calories + "\n" + "Fat: " + fatQuantity + "\n" + "Sugar: " + sugarQuantity + "\n" + "Protein: " + proteinQuantity;
                                     setLayout(label, ingredString, nutriString, healthString, instruction_url, image);
@@ -174,18 +170,23 @@ public class MakeYourself extends AppCompatActivity {
     public void setLayout(String name, String ingredients, String nutrients, String health, String url, final String img) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         View childLayout = inflater.inflate(R.layout.make_yourself_list, null, false);
-        TextView nameView = childLayout.findViewById(R.id.recepie_name);
+        TextView nameView = childLayout.findViewById(R.id.recipe_name);
         nameView.setText(name);
-        TextView ingredientView = childLayout.findViewById(R.id.recepie_ingredients);
+        TextView ingredientView = childLayout.findViewById(R.id.recipe_ingredients);
         ingredientView.setText(ingredients);
-        TextView nutrientView = childLayout.findViewById(R.id.recepie_nutrients);
+        TextView nutrientView = childLayout.findViewById(R.id.recipe_nutrients);
         nutrientView.setText(nutrients);
-        TextView healthView = childLayout.findViewById(R.id.recepie_health);
+        TextView healthView = childLayout.findViewById(R.id.recipe_health);
         healthView.setText(health);
-        TextView urlView = childLayout.findViewById(R.id.recepie);
-        urlView.setText(url);
-        Linkify.addLinks(urlView, Linkify.WEB_URLS);
-        final ImageView imageView = childLayout.findViewById(R.id.recepie_img);
+
+        TextView urlView = childLayout.findViewById(R.id.recipe);
+        urlView.setText(Html.fromHtml("<a href=\""+ url + "\">" + "Recipe" + "</a>"));
+        urlView.setClickable(true);
+        urlView.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
+        final ImageView imageView = childLayout.findViewById(R.id.recipe_img);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -199,13 +200,6 @@ public class MakeYourself extends AppCompatActivity {
             }
         });
         thread.start();
-        /*
-        TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
-        nameView.setText(menu);
-        */
-//        ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
-//        imageView.setImageDrawable(LoadImageFromWebOperations(image));
-
         LinearLayout frame = findViewById(R.id.make_yourself_frame);
         frame.addView(childLayout);
     }

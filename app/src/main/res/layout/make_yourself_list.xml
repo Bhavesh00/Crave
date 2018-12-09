@@ -7,39 +7,37 @@
     android:layout_margin="10dp">
     <TextView
         android:layout_margin="5dp"
-        android:id="@+id/recepie_name"
+        android:id="@+id/recipe_name"
         android:text="Name"
         android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <ImageView
-        android:id="@+id/recepie_img"
+        android:id="@+id/recipe_img"
         android:layout_gravity="center"
         android:layout_width="150dp"
         android:layout_height="150dp" />
     <TextView
         android:layout_margin="5dp"
-        android:id="@+id/recepie_ingredients"
+        android:id="@+id/recipe_ingredients"
         android:text="Ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
         android:layout_margin="5dp"
-        android:id="@+id/recepie"
-        android:text="www.google.com"
+        android:id="@+id/recipe"
+        android:text="Recipe"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:clickable="true" />
+        android:layout_height="wrap_content" />
     <TextView
         android:layout_margin="5dp"
-        android:id="@+id/recepie_nutrients"
+        android:id="@+id/recipe_nutrients"
         android:text="Nutrients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
         android:layout_margin="5dp"
-        android:id="@+id/recepie_health"
+        android:id="@+id/recipe_health"
         android:text="Health Labels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
