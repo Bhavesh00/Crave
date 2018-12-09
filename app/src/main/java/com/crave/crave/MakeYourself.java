@@ -8,9 +8,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.util.Linkify;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +105,7 @@ public class MakeYourself extends AppCompatActivity {
                                     String image = recipe.getString("image");
                                     Log.d("Image url:", image);
                                     // Get recipe instructions
-                                    String instruction_url = recipe.getString("url");
+                                    String instruction_url = "Recepie Url: " + recipe.getString("url");
                                     Log.d("Instructions:", instruction_url);
                                     // Get Array of Ingredients
                                     JSONArray ingredients = recipe.getJSONArray("ingredientLines");
@@ -110,10 +115,8 @@ public class MakeYourself extends AppCompatActivity {
                                         if (j != ingredients.length() - 1) {
                                             ingredString += ", ";
                                         }
-
                                     }
                                     Log.d("Check ingred:", ingredString);
-
                                     // Get Array of Health Labels
                                     JSONArray health_labels = recipe.getJSONArray("healthLabels");
                                     String healthString = "";
@@ -123,7 +126,6 @@ public class MakeYourself extends AppCompatActivity {
                                             healthString += ", ";
                                         }
                                     }
-
                                     Log.d("Check health:", healthString);
                                     // Get calories:
                                     String calories = recipe.getString("calories");
@@ -139,7 +141,8 @@ public class MakeYourself extends AppCompatActivity {
                                     String proteinQuantity = protein.getString("quantity");
                                     Log.d("Protein api: ", proteinQuantity);
 
-
+                                    String nutriString = "Calories: " + calories + "\n" + "Fat: " + fatQuantity + "\n" + "Sugar: " + sugarQuantity + "\n" + "Protein: " + proteinQuantity;
+                                    setLayout(label, ingredString, nutriString, healthString, instruction_url);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -164,7 +167,30 @@ public class MakeYourself extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void setLayout(String name, String ingredients, String nutrients, String health, String url) {
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        View childLayout = inflater.inflate(R.layout.make_yourself_list, null, false);
+        TextView nameView = childLayout.findViewById(R.id.recepie_name);
+        nameView.setText(name);
+        TextView ingredientView = childLayout.findViewById(R.id.recepie_ingredients);
+        ingredientView.setText(ingredients);
+        TextView nutrientView = childLayout.findViewById(R.id.recepie_nutrients);
+        nutrientView.setText(nutrients);
+        TextView healthView = childLayout.findViewById(R.id.recepie_health);
+        healthView.setText(health);
+        TextView urlView = childLayout.findViewById(R.id.recepie);
+        urlView.setText(url);
+        Linkify.addLinks(urlView, Linkify.WEB_URLS);
 
+        /*
+        TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
+        nameView.setText(menu);
+        */
+//        ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
+//        imageView.setImageDrawable(LoadImageFromWebOperations(image));
 
+        LinearLayout frame = findViewById(R.id.make_yourself_frame);
+        frame.addView(childLayout);
     }
 }

@@ -21,13 +21,21 @@
     <TextView
         android:layout_margin="5dp"
         android:id="@+id/recepie"
-        android:text="Recepie"
+        android:text="www.google.com"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:clickable="true" />
     <TextView
         android:layout_margin="5dp"
         android:id="@+id/recepie_nutrients"
         android:text="Nutrients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_margin="5dp"
+        android:id="@+id/recepie_health"
+        android:text="Health Labels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <View
