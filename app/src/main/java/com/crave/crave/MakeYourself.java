@@ -99,6 +99,9 @@ public class MakeYourself extends AppCompatActivity {
                                     // Get Image url
                                     String image = recipe.getString("image");
                                     Log.d("Image url:", image);
+                                    // Get recipe instructions
+                                    String instruction_url = recipe.getString("url");
+                                    Log.d("Instructions:", instruction_url);
                                     // Get Array of Ingredients
                                     JSONArray ingredients = recipe.getJSONArray("ingredientLines");
                                     // Get Array of Health Labels
