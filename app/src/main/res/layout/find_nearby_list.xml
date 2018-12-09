@@ -30,11 +30,6 @@
         android:text="Menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <ImageView
-        android:layout_margin="5dp"
-        android:id="@+id/restaurant_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <View
         android:layout_margin="5dp"
         android:background="#000000"

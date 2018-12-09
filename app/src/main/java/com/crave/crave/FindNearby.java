@@ -3,6 +3,8 @@ package com.crave.crave;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -149,7 +151,8 @@ public class FindNearby extends AppCompatActivity {
                                     String aggregateRating = rating.getString("aggregate_rating") + "/5";
                                     String votes = rating.getString("votes");
                                     //Get Image
-                                    String image = restaurant.getString("photos_url");
+                                    String image = restaurant.getString("featured_image");
+                                    Log.d("image_restaurant", image);
                                     // Get menu
                                     String menu = restaurant.getString("menu_url");
                                     //Set Layout
@@ -191,7 +194,7 @@ public class FindNearby extends AppCompatActivity {
         }
     }
 
-    public void setLayout(String name, String address, String rating, String menu, String image) {
+    public void setLayout(String name, String address, String rating, String menu, final String image) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         View childLayout = inflater.inflate(R.layout.find_nearby_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.restaurant_name);
@@ -204,20 +207,8 @@ public class FindNearby extends AppCompatActivity {
         menuView.setText(Html.fromHtml("<a href=\""+ menu + "\">" + "Menu" + "</a>"));
         menuView.setClickable(true);
         menuView.setMovementMethod(LinkMovementMethod.getInstance());
-        
-        ImageView imageView = childLayout.findViewById(R.id.restaurant_image);
-        imageView.setImageDrawable(LoadImageFromWebOperations(image));
 
         LinearLayout frame = findViewById(R.id.find_nearby_frame);
         frame.addView(childLayout);
-    }
-
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            return Drawable.createFromStream(is, null);
-        } catch (Exception e) {
-            return null;
-        }
     }
 }
