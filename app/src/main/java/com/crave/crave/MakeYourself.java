@@ -104,8 +104,27 @@ public class MakeYourself extends AppCompatActivity {
                                     Log.d("Instructions:", instruction_url);
                                     // Get Array of Ingredients
                                     JSONArray ingredients = recipe.getJSONArray("ingredientLines");
+                                    String ingredString = "";
+                                    for (int j = 0; j < ingredients.length(); j++) {
+                                        ingredString = ingredString + ingredients.getString(j);
+                                        if (j != ingredients.length() - 1) {
+                                            ingredString += ", ";
+                                        }
+
+                                    }
+                                    Log.d("Check ingred:", ingredString);
+
                                     // Get Array of Health Labels
                                     JSONArray health_labels = recipe.getJSONArray("healthLabels");
+                                    String healthString = "";
+                                    for (int j = 0; j < health_labels.length(); j++) {
+                                        healthString = healthString + health_labels.getString(j);
+                                        if (j != health_labels.length() - 1) {
+                                            healthString += ", ";
+                                        }
+                                    }
+
+                                    Log.d("Check health:", healthString);
                                     // Get calories:
                                     String calories = recipe.getString("calories");
                                     // Get fat:

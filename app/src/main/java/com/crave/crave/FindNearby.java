@@ -147,6 +147,8 @@ public class FindNearby extends AppCompatActivity {
                                     String votes = rating.getString("votes");
                                     //Get Image
                                     String image = restaurant.getString("photos_url");
+                                    // Get menu
+                                    
                                     //Set Layout
                                     setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", null, image);
 
