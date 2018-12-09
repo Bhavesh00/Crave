@@ -3,6 +3,8 @@ package com.crave.crave;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -142,7 +145,7 @@ public class MakeYourself extends AppCompatActivity {
                                     Log.d("Protein api: ", proteinQuantity);
 
                                     String nutriString = "Calories: " + calories + "\n" + "Fat: " + fatQuantity + "\n" + "Sugar: " + sugarQuantity + "\n" + "Protein: " + proteinQuantity;
-                                    setLayout(label, ingredString, nutriString, healthString, instruction_url);
+                                    setLayout(label, ingredString, nutriString, healthString, instruction_url, image);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -168,7 +171,7 @@ public class MakeYourself extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    public void setLayout(String name, String ingredients, String nutrients, String health, String url) {
+    public void setLayout(String name, String ingredients, String nutrients, String health, String url, final String img) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         View childLayout = inflater.inflate(R.layout.make_yourself_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.recepie_name);
@@ -182,7 +185,20 @@ public class MakeYourself extends AppCompatActivity {
         TextView urlView = childLayout.findViewById(R.id.recepie);
         urlView.setText(url);
         Linkify.addLinks(urlView, Linkify.WEB_URLS);
-
+        final ImageView imageView = childLayout.findViewById(R.id.recepie_img);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    URL imgURL = new URL(img);
+                    Bitmap bmp = BitmapFactory.decodeStream(imgURL.openConnection().getInputStream());
+                    imageView.setImageBitmap(bmp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
         /*
         TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
         nameView.setText(menu);
