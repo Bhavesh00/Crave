@@ -141,6 +141,8 @@ public class FindNearby extends AppCompatActivity {
                                     JSONObject restaurant = obj.getJSONObject("restaurant");
                                     //Get Name
                                     String nameVal = restaurant.getString("name");
+                                    // Get URL:
+                                    String url = restaurant.getString("url");
                                     //Get Address
                                     JSONObject location = restaurant.getJSONObject("location");
                                     String address = location.getString("address");
@@ -156,7 +158,7 @@ public class FindNearby extends AppCompatActivity {
                                     // Get menu
                                     String menu = restaurant.getString("menu_url");
                                     //Set Layout
-                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", menu, image);
+                                    setLayout(nameVal, "Address: " + address + ", " + locality + ", " + city, "Rating: " + aggregateRating + " (" + votes + " votes" + ")", menu, image, url);
 
                                 }
                             } catch (JSONException e) {
@@ -194,15 +196,19 @@ public class FindNearby extends AppCompatActivity {
         }
     }
 
-    public void setLayout(String name, String address, String rating, String menu, final String image) {
+    public void setLayout(String name, String address, String rating, String menu, final String image, String url) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         View childLayout = inflater.inflate(R.layout.find_nearby_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.restaurant_name);
         nameView.setText(name);
         TextView addressView = childLayout.findViewById(R.id.restaurant_address);
         addressView.setText(address);
+
         TextView ratingView = childLayout.findViewById(R.id.restaurant_rating);
-        ratingView.setText(rating);
+        ratingView.setText(Html.fromHtml("<a href=\""+ url + "\">" + rating + "</a>"));
+        ratingView.setClickable(true);
+        ratingView.setMovementMethod(LinkMovementMethod.getInstance());
+
         TextView menuView = childLayout.findViewById(R.id.restaurant_menu);
         menuView.setText(Html.fromHtml("<a href=\""+ menu + "\">" + "Menu" + "</a>"));
         menuView.setClickable(true);
