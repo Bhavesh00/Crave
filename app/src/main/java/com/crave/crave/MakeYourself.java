@@ -93,8 +93,8 @@ public class MakeYourself extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
-                            Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
-                            Log.d("response_JSON", "" + response);
+                            // Toast.makeText(getApplicationContext(), "Response!", Toast.LENGTH_LONG).show();
+                            // Log.d("response_JSON", "" + response);
                             try {
                                 // FINISH THE DATA HANDLING HERE:
                                 JSONArray hits = response.getJSONArray("hits");
