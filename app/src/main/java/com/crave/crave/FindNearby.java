@@ -1,6 +1,7 @@
 package com.crave.crave;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,6 +20,7 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,7 +63,7 @@ public class FindNearby extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location setLocation) {
                 if (!receivedLocation) {
-                    Log.d("Location: ", setLocation.toString());
+                    // Log.d("Location: ", setLocation.toString());
                     location = setLocation;
                     double longitude = location.getLongitude();
                     double latitude = location.getLatitude();
@@ -156,7 +158,7 @@ public class FindNearby extends AppCompatActivity {
                                     String votes = rating.getString("votes");
                                     //Get Image
                                     String image = restaurant.getString("featured_image");
-                                    Log.d("image_restaurant", image);
+                                    //Log.d("image_restaurant", image);
                                     // Get menu
                                     String menu = restaurant.getString("menu_url");
                                     //Set Layout
@@ -199,6 +201,8 @@ public class FindNearby extends AppCompatActivity {
 
     public void setLayout(String name, String address, String rating, String menu, final String image, String url) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        InputMethodManager methodMan = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        methodMan.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         View childLayout = inflater.inflate(R.layout.find_nearby_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.restaurant_name);
         nameView.setText(name);

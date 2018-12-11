@@ -1,6 +1,7 @@
 package com.crave.crave;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,8 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,7 +111,7 @@ public class MakeYourself extends AppCompatActivity {
                                     String image = recipe.getString("image");
                                     // Get recipe instructions
                                     String instruction_url = recipe.getString("url");
-                                    Log.d("Recipe url", instruction_url);
+                                    // Log.d("Recipe url", instruction_url);
                                     // Get Array of Ingredients
                                     JSONArray ingredients = recipe.getJSONArray("ingredientLines");
                                     String ingredString = "";
@@ -128,19 +131,42 @@ public class MakeYourself extends AppCompatActivity {
                                         }
                                     }
                                     // Get calories:
-                                    String calories = recipe.getString("calories");
+                                    String calories = recipe.getString("calories").substring(0, recipe.getString("calories").indexOf("."));
+
+
                                     // Get fat:
                                     JSONObject nutrients = recipe.getJSONObject("totalNutrients");
-                                    JSONObject fat = nutrients.getJSONObject("FAT");
-                                    String fatQuantity = fat.getString("quantity");
-                                    // Get Sugar:
-                                    JSONObject sugar = nutrients.getJSONObject("SUGAR");
-                                    String sugarQuantity = fat.getString("quantity");
-                                    // Get Protein:
-                                    JSONObject protein = nutrients.getJSONObject("PROCNT");
-                                    String proteinQuantity = protein.getString("quantity");
 
-                                    String nutriString = "Calories: " + calories + "\n" + "Fat: " + fatQuantity + "\n" + "Sugar: " + sugarQuantity + "\n" + "Protein: " + proteinQuantity;
+                                    JSONObject fat;
+                                    String fatQuantity = "";
+                                    try {
+                                        fat = nutrients.getJSONObject("FAT");
+                                        fatQuantity = fat.getString("quantity").substring(0, fat.getString("quantity").indexOf("."));
+                                    } catch(org.json.JSONException e) {
+                                        fatQuantity = "0";
+                                    }
+
+                                    // Get Sugar:
+                                    JSONObject sugar;
+                                    String sugarQuantity = "";
+                                    try {
+                                       sugar = nutrients.getJSONObject("SUGAR");
+                                       sugarQuantity = sugar.getString("quantity").substring(0, sugar.getString("quantity").indexOf("."));
+                                    } catch(org.json.JSONException e) {
+                                        sugarQuantity = "0";
+                                    }
+
+                                    // Get Protein:
+                                    JSONObject protein;
+                                    String proteinQuantity;
+                                    try {
+                                        protein = nutrients.getJSONObject("PROCNT");
+                                        proteinQuantity = protein.getString("quantity").substring(0, protein.getString("quantity").indexOf("."));
+                                    } catch(org.json.JSONException e) {
+                                        proteinQuantity = "0";
+                                    }
+
+                                    String nutriString = "Calories: " + calories + " g" + "\n" + "Fat: " + fatQuantity + " g" + "\n" + "Sugar: " + sugarQuantity + " g" + "\n" + "Protein: " + proteinQuantity +" g";
                                     setLayout(label, ingredString, nutriString, healthString, instruction_url, image);
                                 }
                             } catch (Exception e) {
@@ -169,6 +195,8 @@ public class MakeYourself extends AppCompatActivity {
     }
     public void setLayout(String name, String ingredients, String nutrients, String health, String url, final String img) {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        InputMethodManager methodMan = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        methodMan.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         View childLayout = inflater.inflate(R.layout.make_yourself_list, null, false);
         TextView nameView = childLayout.findViewById(R.id.recipe_name);
         nameView.setText(name);
@@ -184,16 +212,14 @@ public class MakeYourself extends AppCompatActivity {
         urlView.setClickable(true);
         urlView.setMovementMethod(LinkMovementMethod.getInstance());
 
-
-
         final ImageView imageView = childLayout.findViewById(R.id.recipe_img);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try  {
                     URL imgURL = new URL(img);
-                    Bitmap bmp = BitmapFactory.decodeStream(imgURL.openConnection().getInputStream());
-                    imageView.setImageBitmap(bmp);
+                    Bitmap bmap = BitmapFactory.decodeStream(imgURL.openConnection().getInputStream());
+                    imageView.setImageBitmap(bmap);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
