@@ -40,15 +40,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MakeYourself extends AppCompatActivity {
-    /*
-    private JSONArray hits;
-    private JSONObject recipe;
-    private ArrayList<String> labels; // loop through and add labels
-    private ArrayList<String> imageUrl; // loop through and add url's
-    private JSONArray ingredientLines;
-    private Map<String, ArrayList<String>> ingredients; // loop through
-    */
-
     private static RequestQueue requestQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
